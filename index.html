@@ -663,7 +663,6 @@
             .addTo(map);
     });
 
-    // Train Animation Function
     function createTrainAnimation() {
         const trainIcon = L.divIcon({
             html: '🚂',
@@ -673,8 +672,8 @@
         });
 
         const trainPath = [
-            [14.5374, 121.0543], // Bottom right
-            [14.5374, 121.0143]  // Bottom left
+            [14.5374, 121.0543],
+            [14.5374, 121.0143]
         ];
 
         const trainMarker = L.marker(trainPath[0], {
@@ -703,7 +702,6 @@
         setInterval(animateTrain, 30000);
     }
 
-    // Initialize train animation
     createTrainAnimation();
 
     function showRegisterForm() {
