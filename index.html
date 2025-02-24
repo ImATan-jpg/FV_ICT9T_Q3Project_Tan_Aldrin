@@ -469,9 +469,9 @@
                                 <div class="row g-2">
                                     <div class="col-md-4">
                                         <select class="form-select" id="classSelect" onchange="updatePrice()">
-                                            <option value="standard">Elderly - 20%</option>
-                                            <option value="economy">Student - 10%</option>
-                                            <option value="business">PWD - 20%</option>
+                                            <option value="elderly">Elderly - 20%</option>
+                                            <option value="student">Student - 10%</option>
+                                            <option value="pwd">PWD - 20%</option>
                                         </select>
                                     </div>
                                     <div class="col-md-4">
@@ -625,30 +625,60 @@
         </div>
     </div>
 <script>
-    let currentUser = null;
-    let ticketHistory = [];
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const map = L.map('map').setView([14.5995, 120.9842], 11);
+let currentUser = null;
+let ticketHistory = [];
+const users = JSON.parse(localStorage.getItem('users') || '[]');
+const map = L.map('map').setView([14.5995, 120.9842], 11);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
 
-    const stations = [
-        { name: "North Avenue", coords: [14.6527, 121.0317] },
-        { name: "Quezon Avenue", coords: [14.6421, 121.0355] },
-        { name: "Kamuning", coords: [14.6329, 121.0355] },
-        { name: "Cubao", coords: [14.6191, 121.0355] },
-        { name: "Santolan-Annapolis", coords: [14.6086, 121.0356] },
-        { name: "Ortigas", coords: [14.5883, 121.0574] },
-        { name: "Shaw Boulevard", coords: [14.5810, 121.0533] },
-        { name: "Boni", coords: [14.5741, 121.0484] },
-        { name: "Guadalupe", coords: [14.5671, 121.0436] },
-        { name: "Buendia", coords: [14.5539, 121.0334] },
-        { name: "Ayala", coords: [14.5495, 121.0280] },
-        { name: "Magallanes", coords: [14.5419, 121.0196] },
-        { name: "Taft Avenue", coords: [14.5374, 121.0143] }
-    ];
+const discountRates = {
+    student: 0.20, // 20% discount
+    elderly: 0.30, // 30% discount
+    pwd: 0.30     // 30% discount
+};
+
+const stations = [
+    { name: "North Avenue", coords: [14.6527, 121.0317] },
+    { name: "Quezon Avenue", coords: [14.6421, 121.0355] },
+    { name: "Kamuning", coords: [14.6329, 121.0355] },
+    { name: "Cubao", coords: [14.6191, 121.0355] },
+    { name: "Santolan-Annapolis", coords: [14.6086, 121.0356] },
+    { name: "Ortigas", coords: [14.5883, 121.0574] },
+    { name: "Shaw Boulevard", coords: [14.5810, 121.0533] },
+    { name: "Boni", coords: [14.5741, 121.0484] },
+    { name: "Guadalupe", coords: [14.5671, 121.0436] },
+    { name: "Buendia", coords: [14.5539, 121.0334] },
+    { name: "Ayala", coords: [14.5495, 121.0280] },
+    { name: "Magallanes", coords: [14.5419, 121.0196] },
+    { name: "Taft Avenue", coords: [14.5374, 121.0143] }
+];
+
+stations.forEach(station => {
+    L.marker(station.coords).bindPopup(station.name).addTo(map);
+});
+
+function updatePrice() {
+    const discountType = document.getElementById('discountSelect').value;
+    const selectedClass = document.getElementById('classSelect').value;
+    let basePrice = selectedClass === 'standard' ? 18 : selectedClass === 'economy' ? 20 : 30;
+    
+    const discount = discountRates[discountType] || 0;
+    const finalPrice = basePrice - (basePrice * discount);
+    
+    document.getElementById('mrt3Price').textContent = `₱${finalPrice}`;
+    document.getElementById('lrt1Price').textContent = `₱${finalPrice}`;
+    document.getElementById('lrt2Price').textContent = `₱${finalPrice}`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    updatePrice();
+    document.getElementById('classSelect').addEventListener('change', updatePrice);
+    document.getElementById('discountSelect').addEventListener('change', updatePrice);
+});
+
 
     const redArrowIcon = L.divIcon({
         html: '⬇️',
@@ -926,6 +956,7 @@
         
         updatePrice();
     });
+
 </script>
 
 <div class="train-container">
