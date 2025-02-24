@@ -378,9 +378,9 @@
                                 <select class="form-select" id="fromStation" onchange="calculateRoute()">
                                     <option value="">Select Station</option>
                                     <optgroup label="MRT-3 Line">
-                                        <option value="North Avenue">North Avenue</option>
-                                        <option value="Quezon Avenue">Quezon Avenue</option>
-                                        <option value="Kamuning">Kamuning</option>
+                                        <option value="0">North Avenue</option>
+                                        <option value="13">Quezon Avenue</option>
+                                        <option value="13">Kamuning</option>
                                         <option value="Cubao">Cubao</option>
                                         <option value="Santolan">Santolan-Annapolis</option>
                                         <option value="Ortigas">Ortigas</option>
@@ -391,31 +391,6 @@
                                         <option value="Ayala">Ayala</option>
                                         <option value="Magallanes">Magallanes</option>
                                         <option value="Taft">Taft Avenue</option>
-                                    </optgroup>
-                                                                        <optgroup label="LRT-1 Line">
-                                        <option value="Roosevelt">Roosevelt</option>
-                                        <option value="Balintawak">Balintawak</option>
-                                        <option value="Monumento">Monumento</option>
-                                        <option value="5th Avenue">5th Avenue</option>
-                                        <option value="R. Papa">R. Papa</option>
-                                        <option value="Abad Santos">Abad Santos</option>
-                                        <option value="Blumentritt">Blumentritt</option>
-                                        <option value="Tayuman">Tayuman</option>
-                                        <option value="Bambang">Bambang</option>
-                                        <option value="Doroteo Jose">Doroteo Jose</option>
-                                    </optgroup>
-                                    <optgroup label="LRT-2 Line">
-                                        <option value="Recto">Recto</option>
-                                        <option value="Legarda">Legarda</option>
-                                        <option value="Pureza">Pureza</option>
-                                        <option value="V. Mapa">V. Mapa</option>
-                                        <option value="J. Ruiz">J. Ruiz</option>
-                                        <option value="Gilmore">Gilmore</option>
-                                        <option value="Betty Go-Belmonte">Betty Go-Belmonte</option>
-                                        <option value="Cubao">Araneta Center-Cubao</option>
-                                        <option value="Anonas">Anonas</option>
-                                        <option value="Katipunan">Katipunan</option>
-                                        <option value="Santolan">Santolan</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -437,31 +412,6 @@
                                         <option value="Ayala">Ayala</option>
                                         <option value="Magallanes">Magallanes</option>
                                         <option value="Taft">Taft Avenue</option>
-                                    </optgroup>
-                                    <optgroup label="LRT-1 Line">
-                                        <option value="Roosevelt">Roosevelt</option>
-                                        <option value="Balintawak">Balintawak</option>
-                                        <option value="Monumento">Monumento</option>
-                                        <option value="5th Avenue">5th Avenue</option>
-                                        <option value="R. Papa">R. Papa</option>
-                                        <option value="Abad Santos">Abad Santos</option>
-                                        <option value="Blumentritt">Blumentritt</option>
-                                        <option value="Tayuman">Tayuman</option>
-                                        <option value="Bambang">Bambang</option>
-                                        <option value="Doroteo Jose">Doroteo Jose</option>
-                                    </optgroup>
-                                    <optgroup label="LRT-2 Line">
-                                        <option value="Recto">Recto</option>
-                                        <option value="Legarda">Legarda</option>
-                                        <option value="Pureza">Pureza</option>
-                                        <option value="V. Mapa">V. Mapa</option>
-                                        <option value="J. Ruiz">J. Ruiz</option>
-                                        <option value="Gilmore">Gilmore</option>
-                                        <option value="Betty Go-Belmonte">Betty Go-Belmonte</option>
-                                        <option value="Cubao">Araneta Center-Cubao</option>
-                                        <option value="Anonas">Anonas</option>
-                                        <option value="Katipunan">Katipunan</option>
-                                        <option value="Santolan">Santolan</option>
                                     </optgroup>
                                 </select>
                             </div>
@@ -782,7 +732,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updatePrice() {
         const classSelect = document.getElementById('classSelect');
         const selectedClass = classSelect.value;
-        const basePrice = selectedClass === 'standard' ? 250 : selectedClass === 'economy' ? 500 : 1500;
+        const basePrice = selectedClass === 'standard' ? 18 : selectedClass === 'economy' ? 20 : 30;
         
         document.getElementById('mrt3Price').textContent = `₱${basePrice}`;
         document.getElementById('lrt1Price').textContent = `₱${basePrice}`;
