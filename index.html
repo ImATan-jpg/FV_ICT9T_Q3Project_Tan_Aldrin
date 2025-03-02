@@ -3,91 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Train Booking System</title>
+    <title>ICT Q3 Project </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-    <style>
-        :root {
-            --primary-color: #0d6efd;
-            --border-color: #dee2e6;
-        }
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<style>
+    :root {
+        --primary-color: #0d6efd;
+        --border-color: #dee2e6;
+    }
 
-        body {
-            background-color: #f8f9fa;
-        }
+    body {
+        background-color: #f8f9fa;
+    }
 
-        .navbar-brand {
-            font-weight: bold;
-            color: var(--primary-color) !important;
-        }
+    .navbar-brand {
+        font-weight: bold;
+        color: var(--primary-color) !important;
+    }
 
-        #map {
-            height: 600px;
-            width: 100%;
-            border-radius: 0.375rem;
-        }
+    #map {
+        height: 400px;
+        border-radius: 0.375rem;
+    }
 
-        .train-card {
-            transition: transform 0.2s;
-        }
+    .train-card {
+        transition: transform 0.2s;
+    }
 
-        .train-card:hover {
-            transform: translateY(-2px);
-        }
+    .train-card:hover {
+        transform: translateY(-2px);
+    }
 
-        .price-badge {
-            font-size: 1.25rem;
-            color: #198754;
-            font-weight: bold;
-        }
+    .price-badge {
+        font-size: 1.25rem;
+        color: #198754;
+        font-weight: bold;
+    }
 
-        .notification-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1050;
-        }
+    .notification-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1050;
+    }
 
-        .custom-notification {
-            background-color: #232531;
-            color: white;
-            width: 300px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 10px;
-            display: none;
-        }
+    .custom-notification {
+        background-color: #232531;
+        color: white;
+        width: 300px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+        display: none;
+    }
 
-        .history-container {
-            max-height: 400px;
-            overflow-y: auto;
-        }
+    .notification-icon {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: #2b9875;
+        padding: 8px;
+        border-radius: 8px;
+    }
 
-        .status-indicator {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
-        }
+    .history-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
 
-        .status-active { background-color: #198754; }
-        .status-delayed { background-color: #ffc107; }
-        .status-inactive { background-color: #dc3545; }
+    .status-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 5px;
+    }
 
-        .passenger-control {
-            width: 120px;
-        }
+    .status-active {
+        background-color: #198754;
+    }
 
-        .passenger-control .btn {
-            padding: 0.25rem 0.5rem;
+    .status-delayed {
+        background-color: #ffc107;
+    }
+
+    .status-inactive {
+        background-color: #dc3545;
+    }
+
+    .passenger-control {
+        width: 120px;
+    }
+
+    .passenger-control .btn {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .rating {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 0.3rem;
+        --stroke: #666;
+        --fill: #ffc73a;
+    }
+
+    .rating input {
+        appearance: unset;
+    }
+
+    .rating label {
+        cursor: pointer;
+    }
+
+    .rating svg {
+        width: 2rem;
+        height: 2rem;
+        overflow: visible;
+        fill: transparent;
+        stroke: var(--stroke);
+        stroke-linejoin: bevel;
+        stroke-dasharray: 12;
+        animation: idle 4s linear infinite;
+        transition: stroke 0.2s, fill 0.5s;
+    }
+
+    @keyframes idle {
+        from {
+            stroke-dashoffset: 24;
         }
-    </style>
+    }
+
+    .rating label:hover svg {
+        stroke: var(--fill);
+    }
+
+    .rating input:checked ~ label svg {
+        transition: 0s;
+        animation: idle 4s linear infinite, yippee 0.75s backwards;
+        fill: var(--fill);
+        stroke: var(--fill);
+        stroke-opacity: 0;
+        stroke-dasharray: 0;
+        stroke-linejoin: miter;
+        stroke-width: 8px;
+    }
+
+    @keyframes yippee {
+        0% {
+            transform: scale(1);
+            fill: var(--fill);
+            fill-opacity: 0;
+            stroke-opacity: 1;
+            stroke: var(--stroke);
+            stroke-dasharray: 10;
+            stroke-width: 1px;
+            stroke-linejoin: bevel;
+        }
+        30% {
+            transform: scale(0);
+            fill: var(--fill);
+            fill-opacity: 0;
+            stroke-opacity: 1;
+            stroke: var(--stroke);
+            stroke-dasharray: 10;
+            stroke-width: 1px;
+            stroke-linejoin: bevel;
+        }
+        30.1% {
+            stroke: var(--fill);
+            stroke-dasharray: 0;
+            stroke-linejoin: miter;
+            stroke-width: 8px;
+        }
+        60% {
+            transform: scale(1.2);
+            fill: var(--fill);
+        }
+    }
+
+    .train-container {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        height: 50px;
+        pointer-events: none;
+        z-index: 1000;
+        overflow: hidden;
+    }
+
+    .moving-train {
+        position: absolute;
+        bottom: 0;
+        font-size: 30px;
+        animation: moveTrain 30s linear infinite;
+    }
+
+    @keyframes moveTrain {
+        0% {
+            left: 100%;
+            transform: scaleX(1);
+        }
+        50% {
+            left: -50px;
+            transform: scaleX(1);
+        }
+        50.1% {
+            left: -50px;
+            transform: scaleX(-1);
+        }
+        100% {
+            left: 100%;
+            transform: scaleX(-1);
+        }
+    }
+</style>
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet.movingmarker@1.0.0/MovingMarker.min.js"></script>
+
+    <div class="notification-container"></div>
+
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="#">MRT Booking System</a>
+            <a class="navbar-brand" href="#">MRT</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -112,83 +251,6 @@
         </div>
     </nav>
 
-    <div class="container my-4">
-        <div class="row">
-            <!-- Left Side - Ticket Booking -->
-            <div class="col-lg-5">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title mb-4">Book Your Ticket</h5>
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label">From Station:</label>
-                                <select class="form-select" id="fromStation" onchange="updatePrice()">
-                                    <option value="">Select Station</option>
-                                    <optgroup label="MRT-3 Line">
-                                        <option value="North Avenue">North Avenue</option>
-                                        <option value="Quezon Avenue">Quezon Avenue</option>
-                                        <option value="Kamuning">Kamuning</option>
-                                        <option value="Cubao">Cubao</option>
-                                        <option value="Santolan">Santolan</option>
-                                        <option value="Ortigas">Ortigas</option>
-                                        <option value="Shaw">Shaw Boulevard</option>
-                                        <option value="Boni">Boni</option>
-                                        <option value="Guadalupe">Guadalupe</option>
-                                        <option value="Buendia">Buendia</option>
-                                        <option value="Ayala">Ayala</option>
-                                        <option value="Magallanes">Magallanes</option>
-                                        <option value="Taft">Taft Avenue</option>
-                                    </optgroup>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">To Station:</label>
-                                <select class="form-select" id="toStation" onchange="updatePrice()">
-                                    <!-- Same options as fromStation -->
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Discount Type:</label>
-                                <select class="form-select" id="discountType" onchange="updatePrice()">
-                                    <option value="regular">Regular</option>
-                                    <option value="pwd">PWD (30% off)</option>
-                                    <option value="elderly">Elderly (30% off)</option>
-                                    <option value="student">Student (20% off)</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Travel Date:</label>
-                                <input type="date" class="form-control" id="travelDate">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label">Number of Passengers:</label>
-                                <div class="input-group passenger-control">
-                                    <button class="btn btn-outline-secondary" onclick="adjustPassengers(-1)">-</button>
-                                    <span class="form-control text-center" id="passengerCount">1</span>
-                                    <button class="btn btn-outline-secondary" onclick="adjustPassengers(1)">+</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Train Options -->
-                <div class="train-list">
-                    <!-- Train cards will be dynamically populated -->
-                </div>
-            </div>
-
-            <!-- Right Side - Map -->
-            <div class="col-lg-7">
-                <div class="card shadow-sm">
-                    <div class="card-body p-0">
-                        <div id="map"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Login Modal -->
     <div class="modal fade" id="loginModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -217,8 +279,35 @@
         </div>
     </div>
 
-    <!-- Status Modal -->
-    <div class="modal fade" id="statusModal">
+    <div class="modal fade" id="registerModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Register</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="registerName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="registerEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="registerPassword" required>
+                        </div>
+                        <div class="alert alert-danger d-none" id="registerError"></div>
+                        <button type="submit" class="btn btn-primary w-100">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div class="modal fade" id="statusModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -237,352 +326,593 @@
                             </div>
                             <p class="mb-1">Operating normally</p>
                         </div>
-                        <!-- Add more status items as needed -->
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">LRT-1 Line</h6>
+                                    <small class="text-muted">Updated 2 minutes ago</small>
+                                </div>
+                                <span class="status-indicator status-delayed"></span>
+                            </div>
+                            <p class="mb-1">Minor delays due to technical maintenance</p>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">LRT-2 Line</h6>
+                                    <small class="text-muted">Updated 10 minutes ago</small>
+                                </div>
+                                <span class="status-indicator status-active"></span>
+                            </div>
+                            <p class="mb-1">Operating normally</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- History Modal -->
     <div class="modal fade" id="historyModal">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Booking History</h5>
+                    <h5 class="modal-title">Ticket History</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="history-container" id="ticketHistory"></div>
+                    <div class="history-container" id="ticketHistory">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Notification Container -->
-    <div class="notification-container"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">To Station:</label>
+                                <select class="form-select" id="toStation" onchange="calculateRoute()">
+                                    <option value="">Select Station</option>
+                                    <optgroup label="MRT-3 Line">
+                                        <option value="0">North Avenue</option>
+                                        <option value="13">Quezon Avenue</option>
+                                        <option value="13">Kamuning</option>
+                                        <option value="16">Cubao</option>
+                                        <option value="16">Santolan-Annapolis</option>
+                                        <option value="20">Ortigas</option>
+                                        <option value="20">Shaw Boulevard</option>
+                                        <option value="20">Boni</option>
+                                        <option value="24">Guadalupe</option>
+                                        <option value="24">Buendia</option>
+                                        <option value="24">Ayala</option>
+                                        <option value="28">Magallanes</option>
+                                        <option value="28">Taft Avenue</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">To Station:</label>
+                                <select class="form-select" id="toStation" onchange="calculateRoute()">
+                                    <option value="">Select Station</option>
+                                    <optgroup label="MRT-3 Line">
+                                        <option value="0">North Avenue</option>
+                                        <option value="13">Quezon Avenue</option>
+                                        <option value="13">Kamuning</option>
+                                        <option value="16">Cubao</option>
+                                        <option value="16">Santolan-Annapolis</option>
+                                        <option value="20">Ortigas</option>
+                                        <option value="20">Shaw Boulevard</option>
+                                        <option value="20">Boni</option>
+                                        <option value="24">Guadalupe</option>
+                                        <option value="24">Buendia</option>
+                                        <option value="24">Ayala</option>
+                                        <option value="28">Magallanes</option>
+                                        <option value="28">Taft Avenue</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                                                        <div class="col-12">
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <select class="form-select" id="classSelect" onchange="updatePrice()">
+                                            <option value="elderly">Elderly - 20%</option>
+                                            <option value="student">Student - 10%</option>
+                                            <option value="pwd">PWD - 20%</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="date" class="form-control" id="travelDate">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="input-group passenger-control">
+                                            <button class="btn btn-outline-secondary" onclick="decrementPassengers()">-</button>
+                                            <span class="form-control text-center" id="passengerCount">1</span>
+                                            <button class="btn btn-outline-secondary" onclick="incrementPassengers()">+</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="train-list">
+                    <div class="card shadow-sm mb-3 train-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">MRT-3 Line</h5>
+                                    <p class="card-text text-muted mb-2">5:00 AM - 10:30 PM</p>
+                                    <div class="d-flex gap-2">
+                                        <span class="badge bg-light text-dark">Air Conditioned</span>
+                                        <span class="badge bg-light text-dark">Security</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="price-badge mb-2" id="mrt3Price">₱18</div>
+                                    <button class="btn btn-primary" onclick="buyTicket('MRT-3')">Buy Ticket</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-3 train-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">LRT-1 Line</h5>
+                                    <p class="card-text text-muted mb-2">4:30 AM - 10:15 PM</p>
+                                    <div class="d-flex gap-2">
+                                        <span class="badge bg-light text-dark">Air Conditioned</span>
+                                        <span class="badge bg-light text-dark">Security</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="price-badge mb-2" id="lrt1Price">₱20</div>
+                                    <button class="btn btn-primary" onclick="buyTicket('LRT-1')">Buy Ticket</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm mb-3 train-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">LRT-2 Line</h5>
+                                    <p class="card-text text-muted mb-2">5:00 AM - 9:30 PM</p>
+                                    <div class="d-flex gap-2">
+                                        <span class="badge bg-light text-dark">Air Conditioned</span>
+                                        <span class="badge bg-light text-dark">Security</span>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="price-badge mb-2" id="lrt2Price">₱30</div>
+                                    <button class="btn btn-primary" onclick="buyTicket('LRT-2')">Buy Ticket</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                        <div class="col-lg-7">
+                <div class="card shadow-sm">
+                    <div class="card-body p-0">
+                        <div id="map"></div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#details">Details</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#amenities">Amenities</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#statistics">Statistics</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#route">Route</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews">Reviews</button>
+                            </li>
+                        </ul>
+                        <div class="tab-content p-3">
+                            <div class="tab-pane fade show active" id="details">
+                                <div id="route-details"></div>
+                            </div>
+                            <div class="tab-pane fade" id="amenities">
+                                <h6>Available Amenities</h6>
+                                <ul class="list-unstyled">
+                                    <li>✓ Air Conditioning</li>
+                                    <li>✓ Security Personnel</li>
+                                    <li>✓ CCTV Monitoring</li>
+                                    <li>✓ PWD Access</li>
+                                </ul>
+                            </div>
+                            <div class="tab-pane fade" id="statistics">
+                                <div id="statistics-content"></div>
+                            </div>
+                            <div class="tab-pane fade" id="route">
+                                <div id="route-info"></div>
+                            </div>
+                            <div class="tab-pane fade" id="reviews">
+                                <div id="reviews-content">
+                                    <div class="mb-4">
+                                        <h6>Rate your experience</h6>
+                                        <div class="rating">
+                                            <input type="radio" id="star-1" name="star-radio" value="star-1">
+                                            <label for="star-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-2" name="star-radio" value="star-2">
+                                            <label for="star-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-3" name="star-radio" value="star-3">
+                                            <label for="star-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-4" name="star-radio" value="star-4">
+                                            <label for="star-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                            <input type="radio" id="star-5" name="star-radio" value="star-5">
+                                            <label for="star-5">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path pathLength="360" d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"></path></svg>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <script>
-    // Global variables
-    var currentUser = null;
-    var ticketHistory = [];
+let currentUser = null;
+let ticketHistory = [];
+const users = JSON.parse(localStorage.getItem('users') || '[]');
+const map = L.map('map').setView([14.5995, 120.9842], 11);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+}).addTo(map);
+
+const discountRates = {
+    student: 0.20, // 20% discount
+    elderly: 0.30, // 30% discount
+    pwd: 0.30     // 30% discount
+};
+
+const stations = [
+    { name: "North Avenue", coords: [14.6527, 121.0317] },
+    { name: "Quezon Avenue", coords: [14.6421, 121.0355] },
+    { name: "Kamuning", coords: [14.6329, 121.0355] },
+    { name: "Cubao", coords: [14.6191, 121.0355] },
+    { name: "Santolan-Annapolis", coords: [14.6086, 121.0356] },
+    { name: "Ortigas", coords: [14.5883, 121.0574] },
+    { name: "Shaw Boulevard", coords: [14.5810, 121.0533] },
+    { name: "Boni", coords: [14.5741, 121.0484] },
+    { name: "Guadalupe", coords: [14.5671, 121.0436] },
+    { name: "Buendia", coords: [14.5539, 121.0334] },
+    { name: "Ayala", coords: [14.5495, 121.0280] },
+    { name: "Magallanes", coords: [14.5419, 121.0196] },
+    { name: "Taft Avenue", coords: [14.5374, 121.0143] }
+];
+
+stations.forEach(station => {
+    L.marker(station.coords).bindPopup(station.name).addTo(map);
+});
+
+function updatePrice() {
+    const discountType = document.getElementById('discountSelect').value;
+    const selectedClass = document.getElementById('classSelect').value;
+    let basePrice = selectedClass === 'standard' ? 18 : selectedClass === 'economy' ? 20 : 30;
     
-    // Station coordinates
-    var stations = {
-        'North Avenue': [14.6527, 121.0317],
-        'Quezon Avenue': [14.6426, 121.0355],
-        'Kamuning': [14.6329, 121.0366],
-        'Cubao': [14.6191, 121.0509],
-        'Santolan': [14.6086, 121.0557],
-        'Ortigas': [14.5883, 121.0566],
-        'Shaw': [14.5810, 121.0533],
-        'Boni': [14.5747, 121.0474],
-        'Guadalupe': [14.5671, 121.0430],
-        'Buendia': [14.5539, 121.0334],
-        'Ayala': [14.5499, 121.0278],
-        'Magallanes': [14.5419, 121.0194],
-        'Taft': [14.5378, 121.0145]
-    };
+    const discount = discountRates[discountType] || 0;
+    const finalPrice = basePrice - (basePrice * discount);
+    
+    document.getElementById('mrt3Price').textContent = `₱${finalPrice}`;
+    document.getElementById('lrt1Price').textContent = `₱${finalPrice}`;
+    document.getElementById('lrt2Price').textContent = `₱${finalPrice}`;
+}
 
-    // Discount rates
-    var discountRates = {
-        regular: 0,
-        pwd: 0.30,    // 30% discount
-        elderly: 0.30, // 30% discount
-        student: 0.20  // 20% discount
-    };
+document.addEventListener('DOMContentLoaded', function() {
+    updatePrice();
+    document.getElementById('classSelect').addEventListener('change', updatePrice);
+    document.getElementById('discountSelect').addEventListener('change', updatePrice);
+});
 
-    // Base prices per station distance
-    var basePrice = 15; // Base fare
-    var pricePerStation = 2; // Additional fare per station
-    // Initialize map when page loads
-    window.onload = function() {
-        initMap();
-        initStations();
-        updatePrice();
-    };
 
-    function initMap() {
-        // Initialize the map centered on Metro Manila
-        var map = L.map('map').setView([14.5995, 121.0367], 12);
-        
-        // Add the OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    const redArrowIcon = L.divIcon({
+        html: '⬇️',
+        className: 'red-arrow-icon',
+        iconSize: [20, 20],
+        iconAnchor: [10, 20]
+    });
 
-        // Create a custom icon for stations
-        var stationIcon = L.divIcon({
-            html: '<div style="background-color: #0d6efd; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white;"></div>',
-            className: 'station-marker',
-            iconSize: [12, 12]
+    stations.forEach(station => {
+        L.marker(station.coords, { icon: redArrowIcon })
+            .bindPopup(station.name)
+            .addTo(map);
+    });
+
+    function createTrainAnimation() {
+        const trainIcon = L.divIcon({
+            html: '🚂',
+            className: 'train-icon',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15]
         });
 
-        // Add markers for each station
-        Object.entries(stations).forEach(([name, coords]) => {
-            L.marker(coords, {icon: stationIcon})
-                .bindPopup(name)
-                .addTo(map);
-        });
+        const trainPath = [
+            [14.5374, 121.0543],
+            [14.5374, 121.0143]
+        ];
 
-        // Draw the train line
-        var stationPoints = Object.values(stations);
-        L.polyline(stationPoints, {
-            color: '#0d6efd',
-            weight: 4,
-            opacity: 0.7
+        const trainMarker = L.marker(trainPath[0], {
+            icon: trainIcon
         }).addTo(map);
+
+        function animateTrain() {
+            trainMarker.setLatLng(trainPath[0]);
+            
+            const line = L.polyline(trainPath, {
+                opacity: 0
+            });
+            
+            const animator = L.Marker.movingMarker(trainPath, 5000, {
+                autostart: true
+            }).addTo(map);
+            
+            animator.on('end', function() {
+                map.removeLayer(animator);
+            });
+
+            trainMarker.setLatLng(animator.getLatLng());
+        }
+
+        animateTrain();
+        setInterval(animateTrain, 30000);
     }
 
-    function initStations() {
-        var fromSelect = document.getElementById('fromStation');
-        var toSelect = document.getElementById('toStation');
-        
-        // Copy options from fromStation to toStation
-        toSelect.innerHTML = fromSelect.innerHTML;
+    createTrainAnimation();
+
+    function showRegisterForm() {
+        const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+        loginModal.hide();
+        const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+        registerModal.show();
     }
 
-    function calculateDistance(from, to) {
-        var fromCoords = stations[from];
-        var toCoords = stations[to];
-        
-        // Calculate number of stations between
-        var stationNames = Object.keys(stations);
-        var fromIndex = stationNames.indexOf(from);
-        var toIndex = stationNames.indexOf(to);
-        return Math.abs(toIndex - fromIndex);
+    function updateUserDisplay() {
+        const userDisplay = document.getElementById('userDisplay');
+        if (currentUser) {
+            userDisplay.textContent = `Welcome, ${currentUser.name}`;
+        } else {
+            userDisplay.textContent = 'Sign In';
+        }
+    }
+
+    function logout() {
+        currentUser = null;
+        localStorage.removeItem('currentUser');
+        updateUserDisplay();
+        showNotification('Logged Out', 'You have been successfully logged out');
+    }
+
+    function showNotification(message, description) {
+        const notification = document.createElement('div');
+        notification.className = 'custom-notification p-3 d-flex align-items-center justify-content-between';
+        notification.innerHTML = `
+            <div class="d-flex align-items-center">
+                <div class="notification-icon me-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-white">${message}</div>
+                    <div class="text-muted small">${description}</div>
+                </div>
+            </div>
+            <button type="button" class="btn-close btn-close-white" onclick="this.parentElement.remove()"></button>
+        `;
+        document.querySelector('.notification-container').appendChild(notification);
+        notification.style.display = 'flex';
+        setTimeout(() => notification.remove(), 5000);
     }
 
     function updatePrice() {
-        var fromStation = document.getElementById('fromStation').value;
-        var toStation = document.getElementById('toStation').value;
-        var discountType = document.getElementById('discountType').value;
-        var passengers = parseInt(document.getElementById('passengerCount').textContent);
-
-        // Return if stations not selected
-        (fromStation === '' || toStation === '') && (document.querySelector('.train-list').innerHTML = '');
-
-        var distance = calculateDistance(fromStation, toStation);
-        var rawPrice = basePrice + (distance * pricePerStation);
-        var discount = discountRates[discountType];
-        var finalPrice = rawPrice * (1 - discount) * passengers;
-
-        // Update train options display
-        updateTrainOptions(finalPrice);
-    }
-
-    function updateTrainOptions(basePrice) {
-        var trainList = document.querySelector('.train-list');
-        trainList.innerHTML = `
-            <div class="card shadow-sm mb-3 train-card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Express Train</h5>
-                            <p class="card-text text-muted mb-2">Faster Travel Time</p>
-                            <div class="d-flex gap-2">
-                                <span class="badge bg-light text-dark">Premium Service</span>
-                            </div>
-                        </div>
-                        <div class="text-end">
-                            <div class="price-badge mb-2">₱${Math.round(basePrice * 1.2)}</div>
-                            <button class="btn btn-primary" onclick="bookTicket('express')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card shadow-sm mb-3 train-card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Regular Train</h5>
-                            <p class="card-text text-muted mb-2">Standard Service</p>
-                            <div class="d-flex gap-2">
-                                <span class="badge bg-light text-dark">Regular Service</span>
-                            </div>
-                        </div>
-                        <div class="text-end">
-                            <div class="price-badge mb-2">₱${Math.round(basePrice)}</div>
-                            <button class="btn btn-primary" onclick="bookTicket('regular')">Book Now</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-    function adjustPassengers(change) {
-        var countElement = document.getElementById('passengerCount');
-        var currentCount = parseInt(countElement.textContent);
-        var newCount = currentCount + change;
+        const classSelect = document.getElementById('classSelect');
+        const selectedClass = classSelect.value;
+        const basePrice = selectedClass === 'standard' ? 18 : selectedClass === 'economy' ? 20 : 30;
         
-        // Ensure count stays between 1 and 10
-        newCount = Math.max(1, Math.min(10, newCount));
-        countElement.textContent = newCount;
-        updatePrice();
+        document.getElementById('mrt3Price').textContent = `₱${basePrice}`;
+        document.getElementById('lrt1Price').textContent = `₱${basePrice}`;
+        document.getElementById('lrt2Price').textContent = `₱${basePrice}`;
     }
 
-    function bookTicket(trainType) {
-        // Check if user is logged in
-        (!currentUser) && (showNotification('Please sign in to book tickets'), 
-            new bootstrap.Modal(document.getElementById('loginModal')).show(),
-            return);
+    function calculateRoute() {
+        const fromStation = document.getElementById('fromStation').value;
+        const toStation = document.getElementById('toStation').value;
+        
+        if (fromStation && toStation) {
+            map.eachLayer((layer) => {
+                if (layer instanceof L.Polyline) {
+                    map.removeLayer(layer);
+                }
+            });
 
-        var fromStation = document.getElementById('fromStation').value;
-        var toStation = document.getElementById('toStation').value;
-        var discountType = document.getElementById('discountType').value;
-        var travelDate = document.getElementById('travelDate').value;
-        var passengers = document.getElementById('passengerCount').textContent;
+            const start = stations.find(s => s.name.includes(fromStation));
+            const end = stations.find(s => s.name.includes(toStation));
 
-        // Validate selections
-        (!fromStation || !toStation) && (showNotification('Please select both stations'), return);
-        (!travelDate) && (showNotification('Please select a travel date'), return);
+            if (start && end) {
+                L.polyline([start.coords, end.coords], {
+                    color: 'red',
+                    weight: 4,
+                    dashArray: '10, 10'
+                }).addTo(map);
 
-        // Create ticket object
-        var ticket = {
-            id: Date.now(),
-            trainType: trainType,
+                map.fitBounds([start.coords, end.coords], {
+                    padding: [50, 50]
+                });
+            }
+        }
+    }
+
+    function buyTicket(line) {
+        if (!currentUser) {
+            showNotification('Login Required', 'Please sign in to purchase tickets');
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+            return;
+        }
+
+        const fromStation = document.getElementById('fromStation').value;
+        const toStation = document.getElementById('toStation').value;
+        const classType = document.getElementById('classSelect').value;
+        const passengers = document.getElementById('passengerCount').textContent;
+        const date = document.getElementById('travelDate').value;
+        
+        if (!fromStation || !toStation) {
+            showNotification('Error', 'Please select both starting and destination stations');
+            return;
+        }
+
+        if (!date) {
+            showNotification('Error', 'Please select a travel date');
+            return;
+        }
+
+        const ticket = {
+            line,
             from: fromStation,
             to: toStation,
-            discountType: discountType,
-            date: travelDate,
-            passengers: passengers,
-            price: document.querySelector(`.train-card:${trainType === 'express' ? 'first' : 'last'}-child .price-badge`).textContent,
-            status: 'Active'
+            class: classType,
+            passengers,
+            date,
+            price: document.getElementById(`${line.toLowerCase().replace('-', '')}Price`).textContent
         };
 
-        // Save to history
-        saveTicketToHistory(ticket);
-        showNotification('Ticket booked successfully!');
-        generateTicket(ticket);
-    }
-
-    function saveTicketToHistory(ticket) {
         ticketHistory.push(ticket);
-        localStorage.setItem(`tickets_${currentUser.email}`, JSON.stringify(ticketHistory));
-        updateHistoryDisplay();
+        updateTicketHistory();
+        showNotification(
+            'Ticket Purchased Successfully!',
+            `${line}: ${fromStation} to ${toStation}`
+        );
     }
 
-    function updateHistoryDisplay() {
-        var historyContainer = document.getElementById('ticketHistory');
+    function updateTicketHistory() {
+        const historyContainer = document.getElementById('ticketHistory');
         historyContainer.innerHTML = ticketHistory.map(ticket => `
-            <div class="card mb-3">
+            <div class="card mb-2">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <h6 class="card-title">${ticket.from} → ${ticket.to}</h6>
-                        <span class="badge bg-success">${ticket.status}</span>
-                    </div>
-                    <p class="card-text">
-                        <small class="text-muted">
-                            ${ticket.date} • ${ticket.trainType} Train • ${ticket.passengers} Passenger(s)
-                        </small>
+                    <h6 class="card-title">${ticket.line}</h6>
+                    <p class="card-text mb-1">
+                        From: ${ticket.from}<br>
+                        To: ${ticket.to}<br>
+                        Class: ${ticket.class}<br>
+                        Passengers: ${ticket.passengers}<br>
+                        Date: ${ticket.date}<br>
+                        Price: ${ticket.price}
                     </p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span class="price-badge">${ticket.price}</span>
-                        <button class="btn btn-sm btn-outline-primary" onclick="generateTicket(${JSON.stringify(ticket)})">
-                            View Ticket
-                        </button>
-                    </div>
                 </div>
             </div>
         `).join('');
     }
 
-    function showNotification(message, type = 'info') {
-        var notification = document.createElement('div');
-        notification.className = `custom-notification alert alert-${type}`;
-        notification.innerHTML = message;
-        document.querySelector('.notification-container').appendChild(notification);
-        
-        // Show notification
-        notification.style.display = 'block';
-        
-        // Remove after 3 seconds
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
+    function incrementPassengers() {
+        const countElement = document.getElementById('passengerCount');
+        let count = parseInt(countElement.textContent);
+        if (count < 10) {
+            countElement.textContent = count + 1;
+        }
     }
 
-    function login() {
-        var email = document.getElementById('loginEmail').value;
-        var password = document.getElementById('loginPassword').value;
-        
-        currentUser = { email: email };
-        document.getElementById('userDisplay').textContent = email;
-        
-        // Load user's ticket history
-        ticketHistory = JSON.parse(localStorage.getItem(`tickets_${email}`) || '[]');
-        updateHistoryDisplay();
-        
-        // Close modal
-        bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
-        showNotification('Logged in successfully!', 'success');
+    function decrementPassengers() {
+        const countElement = document.getElementById('passengerCount');
+        let count = parseInt(countElement.textContent);
+        if (count > 1) {
+            countElement.textContent = count - 1;
+        }
     }
 
-    function generateTicket(ticket) {
-        // Create a printable ticket view
-        var ticketHTML = `
-            <div class="modal fade" id="ticketModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Your Ticket</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="ticket-container border rounded p-4">
-                                <div class="text-center mb-4">
-                                    <h4>MRT Booking System</h4>
-                                    <small class="text-muted">E-Ticket</small>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-6">
-                                        <strong>From:</strong> ${ticket.from}
-                                    </div>
-                                    <div class="col-6">
-                                        <strong>To:</strong> ${ticket.to}
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-6">
-                                        <strong>Date:</strong> ${ticket.date}
-                                    </div>
-                                    <div class="col-6">
-                                        <strong>Train:</strong> ${ticket.trainType}
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-6">
-                                        <strong>Passengers:</strong> ${ticket.passengers}
-                                    </div>
-                                    <div class="col-6">
-                                        <strong>Price:</strong> ${ticket.price}
-                                    </div>
-                                </div>
-                                <div class="text-center mt-4">
-                                    <img src="https://via.placeholder.com/200x50?text=Barcode" alt="Barcode">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-primary" onclick="window.print()">Print Ticket</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        // Add modal to document and show it
-        document.body.insertAdjacentHTML('beforeend', ticketHTML);
-        var ticketModal = new bootstrap.Modal(document.getElementById('ticketModal'));
-        ticketModal.show();
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+        const errorDiv = document.getElementById('loginError');
         
-        // Remove modal from DOM after it's hidden
-        document.getElementById('ticketModal').addEventListener('hidden.bs.modal', function() {
-            this.remove();
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            updateUserDisplay();
+            bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+            showNotification('Welcome back!', `Logged in as ${user.name}`);
+        } else {
+            errorDiv.textContent = 'Invalid email or password';
+            errorDiv.classList.remove('d-none');
+        }
+    });
+
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('registerName').value;
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+        const errorDiv = document.getElementById('registerError');
+        
+        if (users.some(u => u.email === email)) {
+            errorDiv.textContent = 'Email already registered';
+            errorDiv.classList.remove('d-none');
+            return;
+        }
+        
+        const newUser = { name, email, password };
+        users.push(newUser);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        currentUser = newUser;
+        localStorage.setItem('currentUser', JSON.stringify(newUser));
+        
+        bootstrap.Modal.getInstance(document.getElementById('registerModal')).hide();
+        updateUserDisplay();
+        showNotification('Registration Successful!', `Welcome, ${name}`);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            currentUser = JSON.parse(savedUser);
+            updateUserDisplay();
+        }
+        
+        const userDisplay = document.getElementById('userDisplay').parentElement;
+        userDisplay.addEventListener('click', function(e) {
+            if (currentUser) {
+                e.preventDefault();
+                logout();
+            }
         });
-    }
+        
+        updatePrice();
+    });
+
 </script>
+
+<div class="train-container">
+    <div class="moving-train">🚂</div>
+</div>
+
 </body>
 </html>
