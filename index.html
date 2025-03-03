@@ -339,12 +339,6 @@ function buyTicket(line) {
     var passengers = document.getElementById('passengerCount').textContent;
     var price = document.getElementById(line.toLowerCase().replace('-', '') + 'Price').textContent;
 
-    // Validates the booking requirements
-    var validationMessage = '';
-    validationMessage += !fromStation || !toStation ? 'Please select both stations\n' : '';
-    validationMessage += !date ? 'Please select a travel date\n' : '';
-    validationMessage += !currentUser ? 'Please sign in to purchase tickets\n' : '';
-
     // Processes the purchase if validation passes
     var canProceed = validationMessage === '';
     alert(canProceed ? 'Ticket Purchased Successfully!\n\n' +
